@@ -12,7 +12,6 @@ import { TiendasModule } from './modulos/tiendas/tiendas.module';
 import { EditorialesModule } from './modulos/editoriales/editoriales.module';
 import { AuthModule } from './modulos/auth/auth.module';
 import { UserModule } from './modulos/user/user.module';
-import { AuthModule } from './modulos/auth/auth.module';
 
 
 @Module({
@@ -26,7 +25,8 @@ import { AuthModule } from './modulos/auth/auth.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       autoLoadEntities: true,
-      synchronize: true
+      synchronize: true,
+      logging:true
     }),
     AutoresModule,
     ClientesModule,
