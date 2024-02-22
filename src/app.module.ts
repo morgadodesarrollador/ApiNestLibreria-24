@@ -26,7 +26,7 @@ import { UserModule } from './modulos/user/user.module';
       password: process.env.DB_PASSWORD,
       autoLoadEntities: true,
       synchronize: true,
-      logging:true
+      logging:false
     }),
     AutoresModule,
     ClientesModule,

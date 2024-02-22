@@ -38,7 +38,13 @@ export class LibrosService {
   }
 
   findAll() {
-    return `This action returns all libros`;
+    const libros = this.librosRepository.find({
+      relations: {
+        autor:true,
+        categoria: true
+      }
+    });
+    return libros;
   }
 
   findOne(isbn: string) {
@@ -48,6 +54,7 @@ export class LibrosService {
       },
       relations: {
         autor: true,
+        categoria: true
       }
     });
     return autor;
@@ -59,5 +66,16 @@ export class LibrosService {
 
   remove(id: number) {
     return `This action removes a #${id} libro`;
+  }
+  async deleteAllLibros(){
+    const query = this.librosRepository.createQueryBuilder('libro');
+    try{
+      return await query  
+        .delete()
+        .where({})
+        .execute()
+    }catch(error){
+      throw new InternalServerErrorException('sysadmin ...')
+    }
   }
 }

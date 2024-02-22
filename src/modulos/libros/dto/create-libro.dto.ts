@@ -5,7 +5,7 @@ export class CreateLibroDto {
 
    
     @IsString()
-    @Length(13)
+    // @Length(13)
     isbn: string;
 
     @IsString()

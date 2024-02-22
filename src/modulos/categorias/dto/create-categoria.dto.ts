@@ -2,6 +2,11 @@ import { IsString, MinLength } from "class-validator";
 
 export class CreateCategoriaDto {
 
+
+    @IsString()
+    @MinLength(1)
+    cod: string;
+
     @IsString()
     @MinLength(10)
     name: string;

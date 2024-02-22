@@ -1,0 +1,103 @@
+import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException, NotImplementedException } from '@nestjs/common';
+import { RegisterAuthDto } from './dto/register.dto';
+import { UserRepository } from '../user/entities/user.repository';
+import * as bcrypt from 'bcrypt';
+import { LoginAuthDto } from './dto/login.dto';
+import { JwtService } from "@nestjs/jwt";
+import { User } from '../user/entities/user.entity';
+
+@Injectable()
+export class AuthService {
+  private logger: Logger = new Logger(AuthService.name);
+
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly jwtService:  JwtService
+    ){}
+
+  async login(logitnAuthDto: LoginAuthDto){
+    //verificamos si exist el usuario
+    const user = await this.userRepository.findByEmail(logitnAuthDto.email);
+    if (!user){
+        throw new NotFoundException(`User doesnt't exists`)
+    }
+    let passwordIsValid = false;
+    try{
+        //flag q determina sie el password el ok o no es true si al encriptar el login.password === user.password 
+        //(encriptado en la BD)
+        passwordIsValid = await this.isMatch(logitnAuthDto.password, user.password);
+    }catch(error){
+        this.logger.error(error)
+        throw new InternalServerErrorException('Error validating password en login')
+    }
+    if (passwordIsValid){
+        return this.getAccessToken(user);
+        //return true;
+    }
+
+        
+    // throw new NotImplementedException('Metodo no implementado')
+  }
+  async register(registerdto: RegisterAuthDto) {
+    let { username, email, password } = registerdto;
+        console.log(username, email, password);
+        if (!username){
+            // si username == null --> username = email
+            username = email;
+            registerdto = { username, email, password };
+        }
+        if (await this.userRepository.findByEmail(email)){
+            throw new BadRequestException('Email already exists')
+        }
+        if (await this.userRepository.findByUsername(username)){
+            throw new BadRequestException('Usernane already exists')
+        }
+        let passwordhased;
+        try{
+            passwordhased= await this.getHash(registerdto.password);
+            console.log(passwordhased)
+        }catch(error){
+            this.logger.error(error);
+            throw new InternalServerErrorException('Error Hasing password')
+        }
+        try{  
+            registerdto.password = passwordhased;
+            console.log(registerdto)
+            return this.userRepository.save(registerdto);
+        }catch(error){
+            console.log("-->");
+            this.logger.error(error);
+            //habria que distinguir el error generado por la opcionailidad del 'username' en UserSigiInDto y
+            //el required en UserEntity
+            throw new InternalServerErrorException('Error creating new user')
+        }
+  }
+
+  async getHash (password: string){
+    return await bcrypt.hash(password, 10);
+  }
+
+  async isMatch(password:string, hash: string){
+    return await bcrypt.compare(password, hash);
+  }
+
+  private getAccessToken(user: User){
+    try{
+      const accessToken = this.jwtService.sign({
+        id: user.id,
+        name: user.username,
+        email: user.email,
+        rol: user.roles,
+        create: user.createdAt
+      });
+      return {
+        access_token: accessToken
+      }
+    }catch(error){
+      //this.logger.console.error();
+      throw new InternalServerErrorException('Error al crear el token')
+    }
+    
+  }
+ 
+}

@@ -1,17 +1,32 @@
 [
     {
+        "cod": "bd",
         "name": "Bases de Datos",
         "descripcion": "Bases de Datos SQL y Bases de Datos Documentales",
-        "logo": "logobasesdedatos.png "
+        "logo": "https://imagenes.paraninfo.es/portadas/Resized/0/7/6/9/9788413660769m.jpg"
     },
     {
+        "cod": "pec",
         "name": "Programación en Entorno Cliente",
         "descripcion": "Programación en Entorno Cliente",
-        "logo": "logocliente.png "
+        "logo": "https://www.diegomarin.com/media/catalog/product/cache/e4d64343b1bc593f1c5348fe05efa4a6/9/7/9788499645957.jpg"
     },
     {
+        "cod": "pes",
         "name": "Programación en Entorno Servidor",
         "descripcion": "Programación en Entorno Servidor",
-        "logo": "logoservidor.png "
+        "logo": "https://cdn.vivlio.com/product/v1/b4798c18-2778-49cc-8875-d577dcc27a20/front-cover?tag=AQALWxCmQXdYV70GHsZ0BzWkdXREdmswWUQ%3D&size=450x675"
+    },
+    {
+        "cod": "cicd",
+        "name": "Despliege de Aplicaciones",
+        "descripcion": "Despliega de Aplicaciones, integración contínua y desarrollo contínuo",
+        "logo": "https://belliscovirtual.com/7662-large_default/despliegue-de-aplicaciones-web.jpg"
+    },
+    {
+        "cod": "ads",
+        "name": "Administración de Sistemas",
+        "descripcion": "Administración de Sistemas",
+        "logo": "https://m.media-amazon.com/images/I/61Pm0sQbiwL._AC_UF1000,1000_QL80_.jpg"
     }
 ]

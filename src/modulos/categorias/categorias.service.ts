@@ -25,7 +25,9 @@ export class CategoriasService {
   }
 
   findAll() {
-    return `This action returns all categorias`;
+    const categorias = this.categoriasRepository.find();
+
+    return categorias;
   }
 
   findOne(id: number) {

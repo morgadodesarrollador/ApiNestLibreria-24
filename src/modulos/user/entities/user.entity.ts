@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, JsonContains, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Length } from 'class-validator';
+import { Rol } from "./rol.entity";
 
 @Entity({
     name:'USERS'
@@ -11,11 +12,11 @@ export class User {
     })
     id: string;
 
-    @Column('varchar', {
+    @Column('text', {
         name: 'email',
         nullable: false,
         unique: true,
-        length: 150
+        //length: 255
     })
     email: string;
 
@@ -28,10 +29,10 @@ export class User {
     username: string;
 
     @Column('varchar', {
-        name: 'username',
+        name: 'password',
         nullable: false,
         unique: false,
-        length: 150,
+        length: 255,
     })
     password: string;
 
@@ -77,4 +78,11 @@ export class User {
 
     //relación de 1 a 1 de Auth(User) <---> Cliente
     //cliente: Cliente; 
+
+    @ManyToOne(
+        () => Rol,
+        rol => rol.user
+    )
+    @JoinColumn({ name: 'rol_id'})
+    rol : Rol
 }

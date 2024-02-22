@@ -2,6 +2,7 @@ import { profile } from "console";
 import { BeforeInsert, Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { Cliente } from '../../clientes/entities/cliente.entity';
 import { Autore } from '../../autores/entities/autore.entity';
+import { Categoria } from "src/modulos/categorias/entities/categoria.entity";
 
 @Entity()
 export class Libro {
@@ -67,7 +68,14 @@ export class Libro {
         (autor) => autor.libros,
         {cascade: true}
     )
-    autor?: Autore
+    autor?: Autore;
+
+    @ManyToOne(
+        () => Categoria,
+        (categora) => categora.libros,
+        {cascade: false}
+    )
+    categoria?: Categoria
 
 
 

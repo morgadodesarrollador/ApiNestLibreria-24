@@ -1,31 +1,40 @@
-import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { User } from './user.entity';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Repository, DataSource } from 'typeorm';
+import { User } from "./user.entity";
+
 
 @Injectable()
 export class UserRepository extends Repository<User>{
-    private logger:Logger = new Logger(UserRepository.name);
+    constructor (private datasource: DataSource){
+        super(User, datasource.createEntityManager())
+    }
 
+    async findByEmail(email1: string){
+        try{
+                return await 
+                    this.createQueryBuilder('USERS')
+                        .where(`email = :value`, {value: email1})
+                        .getOne()
+                /*
+                    select * 
+                    from USERS
+                    where email = $email1
+                    limit = 1
+                */
+        }catch (error){
+            throw new InternalServerErrorException('Error al buscar el email');
+            
+        }
+    }
     async findByUsername(username: string){
         try{
-          return await this.createQueryBuilder('USERS')
-                  .where(`USERS.user_name = :value`, {value: username})
-                  .getOne()
-        }catch(error){
-          this.logger.error(error);
-          throw new InternalServerErrorException('Error finding user by name')
+                return await 
+                    this.createQueryBuilder('USERS')
+                        .where(`username = :value`, {value: username})
+                        .getOne()
+        }catch (error){
+            throw new InternalServerErrorException('Error al buscar el email');
+            
         }
-      }
-
-      async findByEmail(email: string){
-        try{
-          return await this.createQueryBuilder('USERS')
-                  .where(`USERS.email = :value`, {value: email})
-                  .getOne()
-        }catch(error){
-          this.logger.error(error);
-          throw new InternalServerErrorException('Error finding user by email')
-        }
-      }
-    
+    }
 }
